@@ -1,0 +1,906 @@
+/* Base Styles & Typography */
+:root {
+    --color-dark: #0A0A0A; 
+    --color-surface: #101010; 
+    --color-text: #F0F0F0;
+    --color-accent-cyan: #00FFFF; 
+    --color-accent-yellow: #FFDD00; 
+    --color-secondary: #8A2BE2; 
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Electrolize', sans-serif; 
+    background-color: var(--color-dark); 
+    color: var(--color-text);
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    cursor: auto; 
+    perspective: 1500px; 
+    overflow-x: hidden; 
+}
+
+/* ------------------------------------------- */
+/* A. LAYOUT AND FULL WEBSITE BACKGROUND FIX */
+/* ------------------------------------------- */
+
+/* All main content sits above the Three.js canvas (z-index: 0) */
+main, header, footer {
+    position: relative; 
+    z-index: 10; 
+}
+
+/* FIX: All section backgrounds are transparent black (RGBA) so the 3D Mesh shines through */
+.games-section, .champions-section, .sponsors-section {
+    background-color: rgba(21, 21, 21, 0.95); 
+}
+.teams-section, .schedule-section, .gallery-section {
+    background-color: rgba(10, 10, 10, 0.98); 
+}
+
+
+/* Scroll Reveal (PPT Effect) styles */
+.scroll-hidden {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* Final revealed state */
+.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.container {
+    width: 85%;
+    max-width: 1400px; 
+    margin: 0 auto;
+}
+
+/* --- TEXT AND HEADING FIX: ENHANCED NEON LOOK --- */
+h1 {
+    color: var(--color-accent-cyan);
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    font-size: 3em; 
+    text-align: center;
+    margin-bottom: 1em; 
+    z-index: 50;
+    margin-top: -40px; 
+    padding-top: 1em;
+    text-transform: uppercase;
+    letter-spacing: 6px; 
+    
+    /* DUAL NEON GLOW EFFECT */
+    color: var(--color-text); 
+    text-shadow: 
+        0 0 8px var(--color-accent-cyan), 
+        0 0 20px var(--color-accent-cyan), 
+        0 0 40px var(--color-accent-yellow), 
+        0 0 60px var(--color-accent-yellow); 
+    
+    position: relative; 
+    z-index: 21; 
+}
+
+h3 {
+    color: var(--color-accent-yellow); 
+    margin-bottom: 0.5em;
+    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
+}
+
+h4 {
+    color: var(--color-accent-yellow); 
+    margin-bottom: 0.5em;
+    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
+}
+
+/* ----------------------------------- */
+/* NAVBAR OVERRIDES (Bootstrap) */
+/* ----------------------------------- */
+.navbar {
+    /* FIX: Ensure sticky position is applied correctly */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(10, 10, 10, 0.98) !important;
+    padding: 15px 0;
+    z-index: 1000; /* Ensure it stays on top */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+}
+
+.navbar-brand img {
+    height: 45px;
+    margin-left: 20px; 
+}
+
+/* Navbar Links (Nav-Link Styling) */
+.nav-link {
+    color: var(--color-text) !important;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
+    transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+    text-transform: uppercase;
+}
+
+/* FIX: Ensure desktop links highlight correctly */
+.nav-link:hover {
+    color: var(--color-accent-cyan) !important;
+    text-shadow: 0 0 5px var(--color-accent-cyan); 
+    transform: translateY(-3px); 
+}
+
+/* Event Button Styling */
+.event-btn {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-left: 10px; 
+}
+
+.event-btn:hover {
+    background-color: var(--color-accent-cyan);
+    color: var(--color-dark);
+    transform: translateY(-3px); 
+}
+
+/* Hamburger Icon Coloring (Bootstrap Toggler) */
+.navbar-toggler {
+    border-color: var(--color-accent-cyan) !important;
+}
+.navbar-toggler-icon {
+    background-image: none; 
+    color: var(--color-accent-cyan);
+}
+.navbar-toggler-icon::before {
+    content: "\f0c9"; /* FontAwesome bars icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+
+/* Hero Section */
+.hero-section {
+    background: none; 
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 70px;
+    position: relative;
+}
+
+.hero-content {
+    background-color: rgba(0, 0, 0, 0.75); 
+    padding: 40px 60px;
+    border-radius: 10px;
+    max-width: 800px;
+    border: 5px solid var(--color-accent-yellow);
+    transition: transform 0.4s, box-shadow 0.4s;
+    opacity: 1; 
+    transform: translateY(0);
+    /* FIX: Aggressively center the content box on all screen sizes */
+    margin: 0 auto;
+}
+
+.hero-section .hero-content.scroll-hidden {
+    opacity: 1; 
+    transition: none; 
+}
+
+/* HERO CONTENT UPWARD HOVER */
+.hero-content:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(255, 221, 0, 0.4);
+}
+
+.hero-content h2 {
+    font-size: 1.7em;
+    font-weight: 400;
+    color: var(--color-accent-yellow);
+    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
+    letter-spacing: normal;
+}
+
+.cta-btn {
+    display: inline-block;
+    background-color: var(--color-accent-cyan);
+    color: var(--color-dark);
+    padding: 15px 40px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 700;
+    margin-top: 25px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-btn:hover {
+    background-color: var(--color-accent-yellow);
+    transform: translateY(-7px);
+}
+
+/* ------------------------------------------- */
+/* B. GAMES SECTION - 3D CAROUSEL STYLES */
+/* ------------------------------------------- */
+
+.games-section {
+    padding: 100px 0 80px 0; 
+    background-color: rgba(21, 21, 21, 0.95); 
+}
+
+.carousel-container {
+    width: 100%;
+    margin: 100px auto 50px auto; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    perspective: 1600px; 
+}
+.carousel {
+    width: 450px; 
+    height: 500px; 
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s ease-in-out;
+}
+
+.carousel-card {
+    position: absolute;
+    width: 450px; 
+    height: 500px; 
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-accent-cyan);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transition: box-shadow 0.5s, transform 0.5s;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+}
+
+.carousel-card.active {
+    border-color: var(--color-accent-yellow);
+    box-shadow: 0 0 30px var(--color-accent-yellow);
+}
+
+.carousel-card:hover {
+    box-shadow: 0 0 40px var(--color-accent-cyan);
+    transform: scale(1.05); 
+}
+
+.carousel-card .card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0.8;
+    transition: opacity 0.5s;
+}
+
+.carousel-card:hover .card-img {
+    opacity: 0.5;
+}
+
+/* Overlay for Text (Adjusted to start higher up, allowing more space) */
+.carousel-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%; 
+    background: linear-gradient(to top, var(--color-dark), transparent);
+    z-index: 2;
+}
+
+/* Adjusting position for h3 and p to move them up further */
+.carousel-card h3 {
+    position: relative;
+    z-index: 3;
+    color: var(--color-accent-yellow);
+    margin-bottom: 8px; 
+    margin-top: 50px; 
+    text-shadow: 0 0 5px var(--color-dark);
+    font-size: 1.3em; 
+}
+
+.carousel-card p {
+    position: relative;
+    z-index: 3;
+    font-size: 1.1em; 
+    color: var(--color-text);
+    margin-bottom: 25px; 
+}
+
+/* Styling for the VIEW EVENT button (now an anchor) */
+.cta-card-detail {
+    position: relative;
+    z-index: 3;
+    background-color: var(--color-secondary);
+    border: none;
+    color: var(--color-text);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Electrolize', sans-serif;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    display: inline-block; 
+    text-decoration: none;
+}
+
+.cta-card-detail:hover {
+    background-color: var(--color-accent-cyan);
+    color: var(--color-dark);
+}
+
+/* Carousel Navigation Arrows */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--color-accent-cyan);
+    border: 2px solid var(--color-accent-cyan);
+    border-radius: 50%;
+    width: 60px; 
+    height: 60px; 
+    font-size: 2.2em; 
+    line-height: 50px; 
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.carousel-nav:hover {
+    background: var(--color-accent-cyan);
+    color: var(--color-dark);
+    border-color: var(--color-accent-yellow);
+}
+
+.carousel-nav.prev { left: 5%; } 
+.carousel-nav.next { right: 5%; } 
+
+/* Card Detail Preview Area */
+.card-detail-preview {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-secondary);
+    padding: 20px;
+    margin-top: 40px;
+    border-radius: 5px;
+    text-align: left;
+    max-width: 800px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.card-detail-preview h4 {
+    color: var(--color-accent-cyan);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+/* ------------------------------------------- */
+/* C. SECTIONS AND FOOTER */
+/* ------------------------------------------- */
+
+/* Tournament Schedule Section */
+.schedule-section {
+    padding: 80px 0;
+}
+.schedule-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.schedule-item {
+    background-color: var(--color-surface);
+    padding: 25px;
+    border-radius: 8px;
+    flex: 1 1 300px;
+    border-bottom: 5px solid var(--color-accent-cyan);
+    position: relative;
+    transition: transform 0.3s;
+}
+.schedule-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+}
+.status-live, .status-upcoming, .status-completed {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+}
+.status-live { background-color: #ff3333; }
+.status-upcoming { background-color: var(--color-accent-yellow); color: var(--color-dark); }
+.status-completed { background-color: #555; }
+.schedule-item h3 { color: white; margin-top: 10px; }
+.cta-btn-small {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+.cta-btn-small:hover { background-color: var(--color-accent-cyan); color: var(--color-dark); }
+
+
+/* Hall of Champions */
+.champions-section {
+    padding: 80px 0;
+    background-color: var(--color-surface);
+}
+.champion-podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 40px;
+    margin-top: 50px;
+}
+.champion-card {
+    text-align: center;
+    width: 250px;
+    padding-top: 20px;
+    position: relative;
+    transition: transform 0.3s;
+}
+.champion-card:hover { transform: translateY(-10px); }
+
+.champion-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid;
+    object-fit: cover;
+}
+.podium-1 img { border-color: var(--color-accent-yellow); box-shadow: 0 0 15px var(--color-accent-yellow); }
+.podium-2 img { border-color: var(--color-accent-cyan); box-shadow: 0 0 10px var(--color-accent-cyan); }
+.podium-3 img { border-color: var(--color-secondary); box-shadow: 0 0 8px var(--color-secondary); }
+
+.podium-number {
+    font-size: 3em;
+    font-weight: 900;
+    color: var(--color-dark);
+    background-color: var(--color-accent-yellow);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    margin: -25px auto 10px auto;
+}
+.podium-2 .podium-number { background-color: var(--color-accent-cyan); }
+.podium-3 .podium-number { background-color: var(--color-secondary); }
+
+.podium-1 { transform: scale(1.2); z-index: 2; margin-bottom: 30px; }
+
+
+/* Gallery Section */
+.gallery-section {
+    padding: 80px 0;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+/* Gallery Images Hover */
+.gallery-grid img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: opacity 0.3s, transform 0.3s;
+    border: 2px solid var(--color-surface);
+}
+
+.gallery-grid img:hover {
+    opacity: 0.8;
+    transform: translateY(-5px); 
+}
+
+/* Sponsors Carousel */
+.sponsors-section {
+    background-color: rgba(21, 21, 21, 0.95);
+    padding: 40px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid var(--color-dark);
+    border-bottom: 1px solid var(--color-dark);
+}
+
+.sponsors-section h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--color-accent-yellow);
+}
+
+.logo-carousel-track {
+    display: flex;
+    animation: scroll-logos 15s linear infinite;
+}
+
+.logo-carousel-track img {
+    height: 50px;
+    width: 150px;
+    margin: 0 40px;
+    filter: grayscale(100%) opacity(0.6);
+    transition: filter 0.3s;
+}
+
+@keyframes scroll-logos {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Team Section (Horizontal Scroll) */
+.teams-section {
+    padding: 80px 0;
+}
+
+.teams-section > p {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.team-cards-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 30px;
+    padding: 20px 0;
+    margin-top: 30px;
+    scrollbar-color: var(--color-accent-cyan) var(--color-surface);
+    scrollbar-width: thin;
+    justify-content: flex-start; 
+}
+
+.team-cards-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.team-cards-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--color-accent-cyan);
+    border-radius: 10px;
+}
+
+.team-cards-scroll::-webkit-scrollbar-track {
+    background-color: var(--color-surface);
+}
+
+/* ------------------------------------------- */
+/* C. TEAM MEMBER 3D FLIP CARD STYLES */
+/* ------------------------------------------- */
+
+.team-card-h {
+    width: 280px;
+    height: 380px;
+    perspective: 1000px; 
+    flex: 0 0 280px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    position: relative;
+    overflow: visible;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    border: 1px solid var(--color-accent-cyan);
+}
+
+/* Flip the card on hover */
+.team-card-h:hover .flip-card-inner {
+    transform: rotateY(180deg);
+    box-shadow: 0 8px 20px var(--color-accent-yellow);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    background-color: var(--color-surface);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Front Face: Image & Designation */
+.flip-card-front {
+    color: var(--color-text);
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.flip-card-front img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--color-accent-yellow);
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+}
+.team-card-h:hover .flip-card-front img {
+    border-color: var(--color-secondary);
+}
+
+.flip-card-front h4 {
+    color: var(--color-accent-cyan);
+    margin-bottom: 5px;
+    font-size: 1.3em;
+    text-shadow: none;
+}
+.flip-card-front p {
+    color: var(--color-text);
+    font-size: 1em;
+}
+
+
+/* Back Face: Details and Links */
+.flip-card-back {
+    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-surface) 100%);
+    color: var(--color-text);
+    transform: rotateY(180deg);
+    text-align: center;
+    padding: 30px;
+}
+
+.flip-card-back h4 {
+    color: var(--color-accent-yellow);
+    margin-bottom: 15px;
+}
+
+.flip-card-links {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.flip-card-links a {
+    text-decoration: none;
+    color: var(--color-text);
+    background-color: var(--color-secondary);
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+}
+
+.flip-card-links a:hover {
+    background-color: var(--color-accent-cyan);
+    color: var(--color-dark);
+    transform: translateY(-2px);
+}
+
+.flip-card-links a i {
+    margin-right: 8px;
+}
+
+
+/* Footer */
+footer {
+    background-color: var(--color-surface);
+    border-top: 3px solid var(--color-accent-yellow);
+}
+
+/* FOOTER CONTENT CORNER PLACEMENT (Desktop) - Achieved via space-between on a max-width container */
+.footer-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 30px 0; 
+    width: 85%;
+    max-width: 1400px; 
+    margin: 0 auto; 
+    flex-wrap: wrap;
+}
+
+/* Social Icon Group Styling */
+.footer-contact {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.footer-contact h3 {
+    margin-bottom: 10px;
+}
+
+/* FIX: Ensure icons are horizontal and have correct spacing */
+.footer-contact > div > a { /* Targeted the div containing the links */
+    font-size: 1.5em;
+    margin-right: 15px; 
+    transition: color 0.3s;
+}
+
+.footer-contact a:hover {
+    color: var(--color-accent-cyan);
+}
+
+.developer-info {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* ------------------------------------------- */
+/* D. MOBILE RESPONSIVENESS (max-width: 768px) */
+/* ------------------------------------------- */
+@media (max-width: 768px) {
+    
+    /* Navbar Adjustments: Bootstrap overrides for mobile styling */
+    .navbar { 
+        padding: 10px 0;
+        align-items: flex-start;
+    }
+    .navbar-brand img {
+        margin-left: 10px;
+    }
+    .navbar-toggler {
+        margin-right: 10px;
+        position: absolute;
+        right: 0;
+    }
+    
+    .nav-link, .event-btn {
+        margin: 5px auto;
+        width: 90%;
+        display: block;
+        text-align: center;
+    }
+    .event-btn {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    /* Global Headings */
+    h2 {
+        font-size: 2em; 
+        letter-spacing: 2px;
+        margin-top: 0;
+        padding-top: 30px; 
+        text-shadow: 0 0 5px var(--color-accent-cyan), 0 0 10px var(--color-accent-yellow); 
+    }
+    .hero-content h2 { font-size: 1.5em; }
+
+    /* FIX: Mobile Centering for Hero Content (Aggressively ensuring center alignment) */
+    .hero-section {
+        width: 100%;
+    }
+    .hero-content {
+        /* This ensures the content box is centered within the 100% width hero section */
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+
+    /* 3D Carousel Scaling */
+    .carousel-container {
+        perspective: 1000px; 
+        flex-direction: column;
+        margin: 50px auto 30px auto; 
+        height: 450px; 
+    }
+    .carousel {
+        width: 300px; 
+        height: 380px; 
+        transform-style: preserve-3d; 
+    }
+    .carousel-card {
+        width: 300px; 
+        height: 380px; 
+    }
+    .carousel-nav {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8em;
+        line-height: 40px;
+    }
+    .carousel-nav.prev { left: 0; } 
+    .carousel-nav.next { right: 0; } 
+    
+    /* CHAMPIONS PODIUM STACKING FIX */
+    .champion-podium {
+        flex-direction: column; 
+        align-items: center; 
+        gap: 40px;
+    }
+    .podium-1 { 
+        transform: scale(1); 
+        margin-bottom: 0; 
+        order: 1; 
+    }
+    .podium-2 { order: 2; }
+    .podium-3 { order: 3; }
+
+    /* Team Cards Mobile (Horizontal Scroll) */
+    .team-cards-scroll {
+        padding: 20px 5%; 
+    }
+    .team-card-h {
+        flex-basis: 85vw; 
+        height: 320px;
+    }
+    
+    /* FOOTER FIX */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        width: 90%; 
+    }
+    .footer-contact { 
+        order: 2; 
+        align-items: center; 
+    }
+    .footer-contact > div > a {
+        margin: 0 10px;
+    }
+    .footer-info { order: 1; }
+}
+
+/* FIX: Ensure desktop navigation links are always visible by overriding Bootstrap's breakpoint collapse */
+@media (min-width: 992px) {
+    .navbar-collapse {
+        display: flex !important;
+        flex-grow: 1;
+    }
+    .navbar-nav {
+        flex-direction: row;
+    }
+}

@@ -4,958 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XP FARM - Esports Platform</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-
-    <!-- INLINE CSS START -->
-    <style>
-/* Base Styles & Typography */
-:root {
-    --color-dark: #0A0A0A; /* Deeper black base */
-    --color-surface: #101010; /* Surface color for sections */
-    --color-text: #F0F0F0;
-    --color-accent-cyan: #00FFFF; /* Primary Accent */
-    --color-accent-yellow: #FFDD00; /* New secondary vibrant color */
-    --color-secondary: #8A2BE2; /* New violet/pink for buttons */
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Electrolize', sans-serif; 
-    background-color: var(--color-dark); /* Base for background */
-    color: var(--color-text);
-    line-height: 1.6;
-    scroll-behavior: smooth;
-    cursor: auto; 
-    perspective: 1500px; 
-}
-
-/* ------------------------------------------- */
-/* A. LAYOUT AND FULL WEBSITE BACKGROUND FIX */
-/* ------------------------------------------- */
-
-/* All main content sits above the Three.js canvas (z-index: 0) */
-main, header, footer {
-    position: relative; 
-    z-index: 10; 
-}
-
-/* FIX: All section backgrounds are transparent black (RGBA) so the 3D Mesh shines through */
-.games-section, .champions-section, .sponsors-section {
-    background-color: rgba(21, 21, 21, 0.95); 
-}
-.teams-section, .schedule-section, .gallery-section {
-    background-color: rgba(10, 10, 10, 0.98); 
-}
-
-
-/* Scroll Reveal (PPT Effect) styles */
-.scroll-hidden {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-/* Final revealed state */
-.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
-.container {
-    width: 85%;
-    max-width: 1400px; 
-    margin: 0 auto;
-}
-
-/* --- TEXT AND HEADING FIX: ENHANCED NEON LOOK --- */
-h1 {
-    /* H1 is styled directly in hero-content but inherits shadows here */
-    color: var(--color-accent-cyan);
-    margin-bottom: 0.5em;
-}
-
-h2 {
-    font-size: 3em; /* Increased size for impact */
-    text-align: center;
-    margin-bottom: 1em; /* Reduced margin */
-    z-index: 50;
-    margin-top: -40px; /* Reduced top margin for better spacing */
-    padding-top: 1em;
-    text-transform: uppercase;
-    letter-spacing: 6px; /* Added spacing to enhance futurism */
-    
-    /* DUAL NEON GLOW EFFECT */
-    color: var(--color-text); /* Base text color is white/light */
-    text-shadow: 
-        0 0 8px var(--color-accent-cyan), /* Cyan inner glow */
-        0 0 20px var(--color-accent-cyan), /* Cyan outer glow */
-        0 0 40px var(--color-accent-yellow), /* Yellow shadow 1 */
-        0 0 60px var(--color-accent-yellow); /* Yellow shadow 2 */
-    
-    position: relative; 
-    z-index: 21; /* Ensures it stacks above the carousel (z-index 10) */
-}
-
-h3 {
-    color: var(--color-accent-yellow); 
-    margin-bottom: 0.5em;
-    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
-}
-
-h4 {
-    color: var(--color-accent-yellow); 
-    margin-bottom: 0.5em;
-    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
-}
-
-/* Navbar */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(10, 10, 10, 0.98);
-    padding: 15px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
-}
-
-.logo-container {
-    margin-left: 2%;
-    display: flex;
-    align-items: center;
-}
-
-.navbar .logo {
-    height: 45px; 
-    width: auto; 
-}
-
-.navbar ul {
-    list-style: none;
-    display: flex;
-    margin-right: 2.5%;
-}
-
-/* Navbar Links Hover */
-.navbar li a, .event-btn {
-    text-decoration: none;
-    color: var(--color-text);
-    padding: 10px 15px;
-    margin-left: 10px;
-    border-radius: 5px;
-    transition: color 0.3s, background-color 0.3s, transform 0.3s;
-}
-
-.navbar li a:hover {
-    color: var(--color-accent-cyan);
-    transform: translateY(-3px); 
-}
-
-.event-btn {
-    /* Apply button styles to the anchor tag */
-    background-color: var(--color-secondary);
-    border: none;
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    display: inline-block; /* Ensure it respects padding/margins */
-}
-
-.event-btn:hover {
-    background-color: var(--color-accent-cyan);
-    color: var(--color-dark);
-    transform: translateY(-3px); 
-}
-
-/* Hero Section */
-.hero-section {
-    background: none; 
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-top: 70px;
-    position: relative;
-}
-
-.hero-content {
-    background-color: rgba(0, 0, 0, 0.95);
-    padding: 40px 60px;
-    border-radius: 10px;
-    max-width: 800px;
-    border: 5px solid var(--color-accent-yellow);
-    transition: transform 0.4s, box-shadow 0.4s;
-    /* This generic style might be overridden by .scroll-hidden, so we add a specific fix below */
-    opacity: 1; 
-    transform: translateY(0);
-}
-
-/* FIX 1: Ensure hero content is immediately visible despite the scroll-hidden class */
-.hero-section .hero-content.scroll-hidden {
-    opacity: 1; 
-    transform: translateY(0);
-    transition: none; /* Disable scroll-reveal transition on the hero section for immediate visibility */
-}
-
-/* HERO CONTENT UPWARD HOVER */
-.hero-content:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(255, 221, 0, 0.4);
-}
-
-/* Note: H1 is inside hero-content, the style below overrides the global H2 setting */
-.hero-content h2 {
-    font-size: 1.7em;
-    font-weight: 400;
-    color: var(--color-accent-yellow);
-    /* Removing strong H2 glow here to keep it subtle */
-    text-shadow: 0 0 5px rgba(255, 221, 0, 0.5); 
-    letter-spacing: normal;
-}
-
-.cta-btn {
-    display: inline-block;
-    background-color: var(--color-accent-cyan);
-    color: var(--color-dark);
-    padding: 15px 40px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 700;
-    margin-top: 25px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.cta-btn:hover {
-    background-color: var(--color-accent-yellow);
-    transform: translateY(-7px);
-}
-
-/* ------------------------------------------- */
-/* B. GAMES SECTION - 3D CAROUSEL STYLES (Adjusted for wider cards and text position) */
-/* ------------------------------------------- */
-
-.games-section {
-    padding: 100px 0 80px 0; /* Ensures ample space above the heading */
-    background-color: rgba(21, 21, 21, 0.95); 
-}
-
-.carousel-container {
-    width: 100%;
-    margin: 100px auto 50px auto; /* FIXED: Increased top margin to 100px to push carousel down */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    perspective: 1600px; 
-}
-.carousel {
-    width: 450px; /* INCREASED WIDTH */
-    height: 500px; /* Increased height */
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 1s ease-in-out;
-}
-
-.carousel-card {
-    position: absolute;
-    width: 450px; /* INCREASED WIDTH */
-    height: 500px; /* Increased height */
-    background-color: var(--color-surface);
-    border: 2px solid var(--color-accent-cyan);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-    transition: box-shadow 0.5s, transform 0.5s;
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Keep content pushed to bottom */
-}
-
-.carousel-card.active {
-    border-color: var(--color-accent-yellow);
-    box-shadow: 0 0 30px var(--color-accent-yellow);
-}
-
-.carousel-card:hover {
-    box-shadow: 0 0 40px var(--color-accent-cyan);
-    transform: scale(1.05); 
-}
-
-.carousel-card .card-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-    opacity: 0.8;
-    transition: opacity 0.5s;
-}
-
-.carousel-card:hover .card-img {
-    opacity: 0.5;
-}
-
-/* Overlay for Text (Adjusted to start higher up, allowing more space) */
-.carousel-card::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%; /* Maintained height, but text is now raised */
-    background: linear-gradient(to top, var(--color-dark), transparent);
-    z-index: 2;
-}
-
-/* Adjusting position for h3 and p to move them up further */
-.carousel-card h3 {
-    position: relative;
-    z-index: 3;
-    color: var(--color-accent-yellow);
-    margin-bottom: 8px; 
-    margin-top: 50px; /* Pushed up significantly from the bottom */
-    text-shadow: 0 0 5px var(--color-dark);
-    font-size: 1.3em; /* Slightly larger font for better readability */
-}
-
-.carousel-card p {
-    position: relative;
-    z-index: 3;
-    font-size: 1.1em; /* Slightly larger font */
-    color: var(--color-text);
-    margin-bottom: 25px; /* Pushed up further */
-}
-
-/* Styling for the VIEW EVENT button (now an anchor) */
-.cta-card-detail {
-    position: relative;
-    z-index: 3;
-    background-color: var(--color-secondary);
-    border: none;
-    color: var(--color-text);
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Electrolize', sans-serif;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    display: inline-block; /* Essential for anchor tags to look like buttons */
-    text-decoration: none;
-}
-
-.cta-card-detail:hover {
-    background-color: var(--color-accent-cyan);
-    color: var(--color-dark);
-}
-
-/* Carousel Navigation Arrows */
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--color-accent-cyan);
-    border: 2px solid var(--color-accent-cyan);
-    border-radius: 50%;
-    width: 60px; 
-    height: 60px; 
-    font-size: 2.2em; 
-    line-height: 50px; 
-    text-align: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.carousel-nav:hover {
-    background: var(--color-accent-cyan);
-    color: var(--color-dark);
-    border-color: var(--color-accent-yellow);
-}
-
-.carousel-nav.prev { left: 5%; } 
-.carousel-nav.next { right: 5%; } 
-
-/* Card Detail Preview Area */
-.card-detail-preview {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-secondary);
-    padding: 20px;
-    margin-top: 40px;
-    border-radius: 5px;
-    text-align: left;
-    max-width: 800px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-}
-
-.card-detail-preview h4 {
-    color: var(--color-accent-cyan);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-/* ------------------------------------------- */
-/* C. SECTIONS AND FOOTER */
-/* ------------------------------------------- */
-
-/* Tournament Schedule Section */
-.schedule-section {
-    padding: 80px 0;
-}
-.schedule-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-.schedule-item {
-    background-color: var(--color-surface);
-    padding: 25px;
-    border-radius: 8px;
-    flex: 1 1 300px;
-    border-bottom: 5px solid var(--color-accent-cyan);
-    position: relative;
-    transition: transform 0.3s;
-}
-.schedule-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
-}
-.status-live, .status-upcoming, .status-completed {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 0.8em;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 3px;
-}
-.status-live { background-color: #ff3333; }
-.status-upcoming { background-color: var(--color-accent-yellow); color: var(--color-dark); }
-.status-completed { background-color: #555; }
-.schedule-item h3 { color: white; margin-top: 10px; }
-.cta-btn-small {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 8px 15px;
-    background-color: var(--color-secondary);
-    color: var(--color-text);
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 0.9em;
-    transition: background-color 0.3s;
-}
-.cta-btn-small:hover { background-color: var(--color-accent-cyan); color: var(--color-dark); }
-
-
-/* Hall of Champions */
-.champions-section {
-    padding: 80px 0;
-    background-color: var(--color-surface);
-}
-.champion-podium {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 40px;
-    margin-top: 50px;
-}
-.champion-card {
-    text-align: center;
-    width: 250px;
-    padding-top: 20px;
-    position: relative;
-    transition: transform 0.3s;
-}
-.champion-card:hover { transform: translateY(-10px); }
-
-.champion-card img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    border: 3px solid;
-    object-fit: cover;
-}
-.podium-1 img { border-color: var(--color-accent-yellow); box-shadow: 0 0 15px var(--color-accent-yellow); }
-.podium-2 img { border-color: var(--color-accent-cyan); box-shadow: 0 0 10px var(--color-accent-cyan); }
-.podium-3 img { border-color: var(--color-secondary); box-shadow: 0 0 8px var(--color-secondary); }
-
-.podium-number {
-    font-size: 3em;
-    font-weight: 900;
-    color: var(--color-dark);
-    background-color: var(--color-accent-yellow);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    margin: -25px auto 10px auto;
-}
-.podium-2 .podium-number { background-color: var(--color-accent-cyan); }
-.podium-3 .podium-number { background-color: var(--color-secondary); }
-
-.podium-1 { transform: scale(1.2); z-index: 2; margin-bottom: 30px; }
-
-
-/* Gallery Section */
-.gallery-section {
-    padding: 80px 0;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px;
-}
-
-/* Gallery Images Hover */
-.gallery-grid img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-    transition: opacity 0.3s, transform 0.3s;
-    border: 2px solid var(--color-surface);
-}
-
-.gallery-grid img:hover {
-    opacity: 0.8;
-    transform: translateY(-5px); 
-}
-
-/* Sponsors Carousel */
-.sponsors-section {
-    background-color: rgba(21, 21, 21, 0.95);
-    padding: 40px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    border-top: 1px solid var(--color-dark);
-    border-bottom: 1px solid var(--color-dark);
-}
-
-.sponsors-section h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-accent-yellow);
-}
-
-.logo-carousel-track {
-    display: flex;
-    animation: scroll-logos 15s linear infinite;
-}
-
-.logo-carousel-track img {
-    height: 50px;
-    width: 150px;
-    margin: 0 40px;
-    filter: grayscale(100%) opacity(0.6);
-    transition: filter 0.3s;
-}
-
-@keyframes scroll-logos {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-/* Team Section (Horizontal Scroll) */
-.teams-section {
-    padding: 80px 0;
-}
-
-/* FIX 2: Center the descriptive text */
-.teams-section > p {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.team-cards-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: 30px;
-    padding: 20px 0;
-    margin-top: 30px;
-    scrollbar-color: var(--color-accent-cyan) var(--color-surface);
-    scrollbar-width: thin;
-    justify-content: flex-start; /* FIX: Force start from left on mobile/scroll */
-}
-
-.team-cards-scroll::-webkit-scrollbar {
-    height: 8px;
-}
-
-.team-cards-scroll::-webkit-scrollbar-thumb {
-    background-color: var(--color-accent-cyan);
-    border-radius: 10px;
-}
-
-.team-cards-scroll::-webkit-scrollbar-track {
-    background-color: var(--color-surface);
-}
-
-/* ------------------------------------------- */
-/* C. TEAM MEMBER 3D FLIP CARD STYLES */
-/* ------------------------------------------- */
-
-.team-card-h {
-    /* Set the space for the card, maintaining aspect ratio */
-    width: 280px;
-    height: 380px;
-    perspective: 1000px; /* Defines the 3D space */
-    flex: 0 0 280px;
-    background: transparent;
-    border: none;
-    padding: 0;
-    position: relative;
-    overflow: visible;
-}
-
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    border: 1px solid var(--color-accent-cyan);
-}
-
-/* Flip the card on hover */
-.team-card-h:hover .flip-card-inner {
-    transform: rotateY(180deg);
-    box-shadow: 0 8px 20px var(--color-accent-yellow);
-}
-
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 10px;
-    background-color: var(--color-surface);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* Front Face: Image & Designation */
-.flip-card-front {
-    color: var(--color-text);
-    z-index: 2;
-    transform: rotateY(0deg);
-}
-
-.flip-card-front img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid var(--color-accent-yellow);
-    margin-bottom: 15px;
-    transition: border-color 0.3s;
-}
-.team-card-h:hover .flip-card-front img {
-    border-color: var(--color-secondary);
-}
-
-.flip-card-front h4 {
-    color: var(--color-accent-cyan);
-    margin-bottom: 5px;
-    font-size: 1.3em;
-    text-shadow: none;
-}
-.flip-card-front p {
-    color: var(--color-text);
-    font-size: 1em;
-}
-
-
-/* Back Face: Details and Links */
-.flip-card-back {
-    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-surface) 100%);
-    color: var(--color-text);
-    transform: rotateY(180deg);
-    text-align: center;
-    padding: 30px;
-}
-
-.flip-card-back h4 {
-    color: var(--color-accent-yellow);
-    margin-bottom: 15px;
-}
-
-.flip-card-links {
-    margin-top: 25px;
-    display: flex;
-    gap: 15px;
-}
-
-.flip-card-links a {
-    text-decoration: none;
-    color: var(--color-text);
-    background-color: var(--color-secondary);
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-    font-size: 0.9em;
-    display: flex;
-    align-items: center;
-}
-
-.flip-card-links a:hover {
-    background-color: var(--color-accent-cyan);
-    color: var(--color-dark);
-    transform: translateY(-2px);
-}
-
-.flip-card-links a i {
-    margin-right: 8px;
-}
-
-
-/* Footer */
-footer {
-    background-color: var(--color-surface);
-    border-top: 3px solid var(--color-accent-yellow);
-}
-
-/* FOOTER CONTENT CORNER PLACEMENT (Desktop) - Achieved via space-between on a max-width container */
-.footer-content {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 30px 0; 
-    width: 85%;
-    max-width: 1400px; 
-    margin: 0 auto; 
-    flex-wrap: wrap;
-}
-
-/* Social Icon Group Styling */
-.footer-contact {
-    display: flex;
-    flex-direction: column; 
-    align-items: flex-start;
-}
-
-.footer-contact h3 {
-    margin-bottom: 10px;
-}
-
-/* FIX: Ensure icons are horizontal and have correct spacing */
-.footer-contact > div > a { /* Targeted the div containing the links */
-    font-size: 1.5em;
-    margin-right: 15px; 
-    transition: color 0.3s;
-}
-
-.footer-contact a:hover {
-    color: var(--color-accent-cyan);
-}
-
-.developer-info {
-    font-size: 0.9em;
-    color: #888;
-}
-
-/* MODAL STYLES REMOVED FOR NAVIGATION FIX */
-
-/* ------------------------------------------- */
-/* D. MOBILE RESPONSIVENESS (max-width: 768px) */
-/* ------------------------------------------- */
-@media (max-width: 768px) {
-    
-    /* Navbar Adjustments */
-    .navbar { flex-direction: column; padding: 10px 0; height: auto; }
-    .navbar nav ul { flex-direction: row; /* FIX: Force horizontal nav */ width: 100%; margin: 10px 0; justify-content: center; }
-    .navbar li a, .event-btn { margin: 5px 10px; width: auto; text-align: center; }
-
-    /* Hero Section padding adjustments */
-    .hero-content { padding: 30px 20px; }
-    .hero-content h2 { font-size: 1.2em; }
-    
-    /* H2 adjustment for mobile - reduce intense glow/spacing */
-    h2 {
-        font-size: 2.5em;
-        letter-spacing: 3px;
-        text-shadow: 
-            0 0 5px var(--color-accent-cyan), 
-            0 0 10px var(--color-accent-yellow); 
-    }
-
-    /* 3D Carousel Mobile Adjustments (re-adjusting card sizes for smaller screens) */
-    .carousel-container {
-        perspective: none; 
-        flex-direction: column;
-        gap: 0;
-    }
-    .carousel {
-        height: auto;
-        transform-style: flat;
-        transition: none;
-        width: 90%; /* Fixed width for non-3D mobile view */
-    }
-    /* Cards stacked vertically, 3D transform overridden */
-    .carousel-card {
-        position: static;
-        transform: none !important; 
-        margin-bottom: 20px;
-        width: 100%;
-        height: 380px; 
-    }
-
-    /* Mobile Text Position in Cards */
-    .carousel-card h3 {
-        margin-top: 10%; 
-        font-size: 1.1em;
-    }
-    .carousel-card p {
-        font-size: 0.95em;
-        margin-bottom: 15px;
-    }
-
-    /* Wrap arrows and carousel content for centering */
-    .carousel-nav {
-        position: static;
-        transform: none;
-        margin: 10px;
-        width: 40px;
-        height: 40px;
-        font-size: 1.5em;
-        line-height: 35px;
-    }
-
-    .carousel-container > .carousel, 
-    .carousel-container > .carousel-nav {
-        order: 1;
-    }
-    .carousel-container {
-        flex-wrap: wrap;
-    }
-    
-    .card-detail-preview {
-        order: 2;
-        margin-top: 10px;
-        width: 90%;
-    }
-
-    /* Champions Podium stacking */
-    .champion-podium {
-        flex-direction: column;
-        align-items: center;
-        gap: 50px;
-    }
-    .podium-1 { /* FIX: Resetting large scale for linear stacking */
-        transform: scale(1); 
-        margin-bottom: 0; 
-        order: 1;
-    }
-    .podium-2 { order: 2; }
-    .podium-3 { order: 3; }
-
-
-    /* Team Cards Mobile (Allow horizontal scroll, smaller card size) */
-    .team-cards-scroll {
-        justify-content: flex-start; /* FIX: Ensure scroll starts from the left */
-    }
-    .team-card-h {
-        flex-basis: 75vw;
-        height: 320px;
-    }
-    .flip-card-front, .flip-card-back {
-        padding: 15px;
-    }
-    .flip-card-back h4 {
-        font-size: 1.1em;
-    }
-    .flip-card-links {
-        flex-direction: column;
-        gap: 10px;
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    /* FOOTER FIX (Mobile stacking and centering) */
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-        width: 90%; 
-    }
-    
-    .footer-contact { 
-        order: 2; 
-        align-items: center; 
-    }
-    .footer-contact > div > a {
-        margin: 0 10px;
-    }
-
-    .footer-info { order: 1; }
-}
-    </style>
-    <!-- INLINE CSS END -->
 </head>
 <body>
-    
-    <header class="navbar">
-        <div class="logo-container">
-            <img src="images/xp logo.jpg" alt="XP!FARM.logo" class="logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#games">Games</a></li>
-                <li><a href="#schedule">Schedule</a></li>
-                <li><a href="#champions">Champions</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#teams">Teams</a></li>
-                <!-- FIX: Changed button to anchor link pointing to the schedule section -->
-                <li><a href="#schedule" class="event-btn">Events</a></li>
-            </ul>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+              <img src="images/xp logo.jpg" alt="XP!FARM.logo" class="logo">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav ms-auto"> <a class="nav-link" href="#home">Home</a>
+                <a class="nav-link" href="#games">Games</a>
+                <a class="nav-link" href="#schedule">Schedule</a>
+                <a class="nav-link" href="#champions">Champions</a>
+                <a class="nav-link" href="#gallery">Gallery</a>
+                <a class="nav-link" href="#teams">Teams</a>
+                <a class="nav-link event-btn" href="#schedule">Events</a>
+              </div>
+            </div>
+          </div>
         </nav>
     </header>
 
-    <!-- REMOVED: Coming Soon Modal structure -->
-
     <main>
         <section id="home" class="hero-section">
-            <!-- This section is left untouched as per your request -->
             <div class="hero-content scroll-hidden">
                 <img src="images/xp logo.jpg" alt="XP!FARM." class="logo">
+                <h1>XP!FARM.</h1>
                 <h2>Your Gateway to *Esports Excellence*.</h2>
                 <p>We are a premier esports company dedicated to hosting electrifying events, nurturing competitive talent, and driving the future of gaming for titles like BGMI, Valorant, and Free Fire.</p>
                 <a href="#games" class="cta-btn">EXPLORE GAMES</a>
@@ -972,7 +62,6 @@ footer {
                             <img src="images/bgmi_card.jpg" alt="BGMI" class="card-img">
                             <h3>Battlegrounds Mobile India</h3>
                             <p>The ultimate battle royale experience.</p>
-                            <!-- FIX: Changed button to anchor link pointing to the schedule section -->
                             <a href="#schedule" class="cta-card-detail">VIEW EVENT</a>
                         </div>
 
@@ -980,7 +69,6 @@ footer {
                             <img src="images/ff_card.jpg" alt="Free Fire" class="card-img">
                             <h3>Free Fire</h3>
                             <p>Fast-paced action and quick decision-making.</p>
-                            <!-- FIX: Changed button to anchor link pointing to the schedule section -->
                             <a href="#schedule" class="cta-card-detail">VIEW EVENT</a>
                         </div>
 
@@ -988,7 +76,6 @@ footer {
                             <img src="images/valo_card.jpg" alt="Valorant" class="card-img">
                             <h3>Valorant</h3>
                             <p>Tactical 5v5 FPS.</p>
-                            <!-- FIX: Changed button to anchor link pointing to the schedule section -->
                             <a href="#schedule" class="cta-card-detail">VIEW EVENT</a>
                         </div>
 
@@ -1022,7 +109,7 @@ footer {
                         <p>Date: Nov 25</p>
                         <a href="#" class="cta-btn-small">REGISTER</a>
                     </div>
-                     <div class="schedule-item">
+                   <div class="schedule-item">
                         <div class="status-completed">COMPLETED</div>
                         <h3>Valorant Masters: Final Battle</h3>
                         <p>Prize Pool: $75,000</p>
@@ -1038,19 +125,19 @@ footer {
                 <h2>Hall of Champions</h2>
                 <div class="champion-podium">
                     <div class="champion-card podium-2">
-                        <img src="https://via.placeholder.com/150x150/A0A0A0/000000?text=2nd" alt="Second Place">
+                        <img src="images/lakhi pic.jpg" alt="Second Place">
                         <h4>Team Aura</h4>
                         <p>2nd Place | Valorant Masters</p>
                         <div class="podium-number">2</div>
                     </div>
                     <div class="champion-card podium-1">
-                        <img src="https://via.placeholder.com/150x150/FFDD00/000000?text=1st" alt="First Place">
+                        <img src="images/louis pic.jpg" alt="First Place">
                         <h4>Team VORTEX</h4>
                         <p>BGMI Autumn Clash Winners</p>
                         <div class="podium-number">1</div>
                     </div>
                     <div class="champion-card podium-3">
-                        <img src="https://via.placeholder.com/150x150/CD7F32/000000?text=3rd" alt="Third Place">
+                        <img src="images/abu pic.jpg" alt="Third Place">
                         <h4>Player ZEUS</h4>
                         <p>3rd Place | Free Fire Series</p>
                         <div class="podium-number">3</div>
@@ -1094,7 +181,6 @@ footer {
             <p>The individuals driving XP Farm's vision in the world of esports.</p>
             <div class="team-cards-scroll">
                 
-                <!-- FIXED: Team Member 1 - 3D Flip Card Structure (Corrected image path) -->
                 <div class="team-card-h">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -1112,7 +198,6 @@ footer {
                     </div>
                 </div>
                 
-                <!-- FIXED: Team Member 2 - 3D Flip Card Structure -->
                 <div class="team-card-h">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -1130,7 +215,6 @@ footer {
                     </div>
                 </div>
 
-                <!-- FIXED: Team Member 3 - 3D Flip Card Structure -->
                 <div class="team-card-h">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -1148,7 +232,6 @@ footer {
                     </div>
                 </div>
                 
-                <!-- FIXED: Team Member 4 - 3D Flip Card Structure -->
                 <div class="team-card-h">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -1166,7 +249,6 @@ footer {
                     </div>
                 </div>
 
-                <!-- FIXED: Team Member 5 - 3D Flip Card Structure -->
                 <div class="team-card-h">
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
@@ -1193,7 +275,6 @@ footer {
         <div class="footer-content scroll-hidden">
             <div class="footer-contact">
                 <h3>Connect With Us</h3>
-                <!-- Ensure correct structure for social links -->
                 <div>
                     <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -1203,195 +284,13 @@ footer {
             
             <div class="footer-info">
                 <p>&copy; 2025 XP FARM. All rights reserved.</p>
-                <!-- This part is fine and aligned to the right by space-between in the footer-content class -->
                 <p class="developer-info">Developed by MOHAMMED ABU BAKER</p>
             </div>
         </div>
     </footer>
     
-    <script>
-// --- THREE.JS 3D MESH INITIALIZATION (Placed directly here for simplicity and functionality) ---
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
-
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.domElement.style.position = 'fixed';
-renderer.domElement.style.top = '0';
-renderer.domElement.style.left = '0';
-renderer.domElement.style.zIndex = '0'; 
-document.body.appendChild(renderer.domElement);
-
-// Create geometry: a plane that looks like a mesh grid
-const geometry = new THREE.PlaneGeometry(150, 150, 60, 60);
-const material = new THREE.MeshBasicMaterial({
-    color: 0xffffff, // White mesh
-    wireframe: true,
-    transparent: true,
-    opacity: 0.3, 
-});
-
-const plane = new THREE.Mesh(geometry, material);
-plane.rotation.x = -Math.PI / 2;
-plane.position.y = -10;
-scene.add(plane);
-
-camera.position.set(0, 15, 30);
-camera.lookAt(0, -10, 0);
-
-const positionAttribute = geometry.attributes.position;
-const initialZ = [];
-for (let i = 0; i < positionAttribute.count; i++) {
-    initialZ.push(positionAttribute.getZ(i));
-}
-
-// Animation loop (Increased speed)
-function animate() {
-    requestAnimationFrame(animate);
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    plane.rotation.z += 0.0008; 
-    plane.rotation.y += 0.0005;
-
-    const time = Date.now() * 0.0005; 
-    const positions = positionAttribute.array;
-    
-    for (let i = 0; i < positions.length; i += 3) {
-        const index = i / 3;
-        positions[i + 2] = initialZ[index] + Math.sin(positions[i] * 0.8 + time) * 3 + Math.cos(positions[i + 1] * 0.8 + time) * 3; 
-    }
-    positionAttribute.needsUpdate = true;
-
-    renderer.render(scene, camera);
-}
-// Start the animation on window load.
-animate();
-
-
-// Handle resize
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-    </script>
-    
-    <!-- INLINE JAVASCRIPT START (Your custom logic) -->
-    <script>
-// --- Modal Logic Removed: Using anchor links for navigation ---
-// --- No showComingSoon, closeComingSoon, or window.onclick modal handlers are needed. ---
-
-
-// --- Smooth Scrolling for Navbar Links (This now handles all anchor links, including Events/VIEW EVENT) ---
-
-document.querySelectorAll('.navbar a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
-// Since VIEW EVENT buttons are now anchor links, they are also captured by the above logic.
-document.querySelectorAll('a.cta-card-detail').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
-
-// --- Scroll Reveal Observer Logic (For PPT effect) ---
-document.addEventListener("DOMContentLoaded", () => {
-    const observerOptions = {
-        root: null, 
-        rootMargin: '0px',
-        threshold: 0.1 
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                
-                // Stop observing once revealed
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Target all sections and key elements for the reveal effect
-    document.querySelectorAll('section, .carousel-container, .schedule-item, .champion-card, .team-card-h, .footer-content').forEach(element => {
-        // Ensure the element starts in the hidden state in CSS
-        element.classList.add('scroll-hidden');
-        observer.observe(element);
-    });
-    
-    // Initialize Carousel after all content is loaded
-    initCarousel();
-});
-
-
-// --- NEW: 3D Carousel Logic (Adjusted translateZ for wider cards) ---
-let carouselAngle = 0;
-const angleIncrement = 120; // 360 / 3 cards
-const translateZDistance = 450; // Adjusted for new card width (450px)
-
-function initCarousel() {
-    const carousel = document.querySelector('.carousel');
-    const cards = document.querySelectorAll('.carousel-card');
-    const navNext = document.querySelector('.carousel-nav.next');
-    const navPrev = document.querySelector('.carousel-nav.prev');
-    const detailText = document.getElementById('detail-text');
-
-    // Initial positioning of the cards
-    cards.forEach((card, index) => {
-        const cardAngle = index * angleIncrement;
-        // Updated translateZ
-        card.style.transform = `rotateY(${cardAngle}deg) translateZ(${translateZDistance}px)`;
-        
-        // Add click listener to show details
-        card.addEventListener('click', (e) => {
-            // Get the data-details attribute and display it
-            const details = card.getAttribute('data-details');
-            detailText.textContent = details;
-            
-            // Highlight the clicked card
-            cards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-        });
-    });
-
-    // Function to rotate the carousel
-    function rotateCarousel(direction) {
-        carouselAngle += direction * angleIncrement;
-        carousel.style.transform = `rotateY(${carouselAngle}deg)`;
-        
-        // Reset active card display
-        detailText.textContent = 'Click a card to see its details here.';
-        cards.forEach(c => c.classList.remove('active'));
-    }
-
-    // Attach navigation listeners
-    navNext.addEventListener('click', () => rotateCarousel(-1)); // Rotate counter-clockwise
-    navPrev.addEventListener('click', () => rotateCarousel(1)); // Rotate clockwise
-    
-    // Set default text for the first card
-    if (cards.length > 0) {
-        detailText.textContent = cards[0].getAttribute('data-details');
-        cards[0].classList.add('active');
-    }
-}
-    </script> 
-    <!-- INLINE JAVASCRIPT END -->
+    <script src="script.js"></script>
 </body>
 </html>
